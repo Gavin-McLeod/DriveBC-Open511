@@ -1,0 +1,105 @@
+'use strict';
+
+/* get511.js
+ *   version 1.0
+ *   gamcleod@gmail.com, 2019.02.17
+ *  
+ *  Acquire and present event data within a table from an Open511 data source
+ *  Created and tested only against the Open511 source from British Columbia
+ *  Intended to present only current active data with MAJOR severity
+ *  This version repeats its get and present on a indefinite repeating basis at a rate given in the variable repeatinterval
+ *  Also presents the time at which the current get is executed (the time at which current data was valid)
+ *  and presents separately the count of events found
+ *  
+ *  ASSUMES:
+ *   existence of DOM entities with IDs as:
+ *     #incidentcount  - count of events in data
+ *     #thetime        - the local time the currently presented data was acquired
+ *     #TableHere      - where the data table presentation shouyld be placed.
+ */
+
+
+var targeturl = "http://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&severity=MAJOR&jurisdiction=drivebc.ca";
+var repeatinterval = 15 * 60 * 1000;  // time between data gets
+var eventsholder;
+
+
+function getDBC_Open511() {
+  $.getJSON(targeturl, function (Events) {
+    console.log("Data acquired");
+    eventsholder = Events.events;
+    displayEvents(eventsholder);
+  })
+  .fail(function() {
+    console.log("error");
+    $("#datahere").append("<p>ERROR: Something went wrong getting data.</p>");
+  })
+  .always(function() {
+    console.log( "complete" );
+  });
+
+}
+
+
+function displayEvents(theseEvents) {
+  /* build a table and populate it by iterating over events from the JSON structure
+     IN: theseEvents = the table of events from the JSON feed.
+     ASSUMES:
+      existence of DOM entities with IDs as:
+        #incidentcount  - count of events in data
+        #thetime        - the local time the currently presented data was acquired
+        #TableHere      - where the data table presentation shouyld be placed.
+  */
+  
+  $("#incidentcount").text(theseEvents.length);                   //Display number of events and current time of this run (becasue we will be repeating in intervals)
+  $("#thetime").text(new Date().toLocaleTimeString());
+
+  
+  $("#TableHere").html($('<table>')).attr('id','theTable');
+  $("#theTable").empty();
+  console.log("Cleared table");
+  
+  if(theseEvents.length == 0) {			// write out something about no data here.
+  	  console.log("NO DATA");
+  	  $('<tr>').append($('<td>')).text('No events at this time').appendTo('#theTable');
+  } 
+  else {
+  	  $.each(theseEvents, function(i, event) {
+		var latlon = [];
+		var mapurl;
+	
+		switch (event.geography.type) {
+		  case "Point":                                                                 // Point type geometery
+			mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
+			break;
+		  case "LineString":                                                            // LineString type geometery, display as Point at mid-string
+			var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
+			latlon = event.geography.coordinates[middleofstring];                       // coords at that index
+																						 
+			if (latlon[0] < 0) {													    // check that lat lon are in correct order ... for North America LON will always be < 0
+				var t = new Array();
+				t[0] = latlon[1];
+				t[1] = latlon[0];
+				latlon = t;
+			}
+			
+			mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
+			break;
+		  default:
+			mapurl = "";
+		}
+	
+		$('<tr>').append(
+		  $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
+		  $('<td>').text(event.description)
+		).appendTo('#theTable')
+	  });
+  }
+}
+    
+function controller() {
+  console.log( "calling get at " + new Date().toLocaleTimeString() );
+  getDBC_Open511();
+}
+controller();
+setInterval(controller, repeatinterval);

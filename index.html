@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DriveBC Current Major Events (Open511)</title>
+  <meta name="description" content="DESCRIPTION">
+
+  <!-- CSS Styles -->
+  <!-- link rel="stylesheet" href="PATH" -->
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+
+    <style>
+       BODY {font-family: Calibri, Helvetica, sans-serif;background-color:#000;}
+       H1 {color:white;}
+       P {color:white;}
+       #datahere {width:80%;max-width:800px;margin:auto;}
+       #theTable {background-color:#ddd;} 
+       #theTable TD {padding:5px; border-top: 1px solid #000;}
+    </style>
+
+
+
+</head>
+
+<body>
+  <div id="datahere">
+      <h1>DriveBC Current Major Events (Open511)</h1>
+      <p>Incident Count: <span id="incidentcount"></span><br>
+         Data valid at: <span id="thetime"></span>
+      </p>
+      <div id="TableHere"></div>
+  </div>
+
+ <!-- JS Scripts -->
+
+  <script src="get511.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
+
+</body>
+</html>
