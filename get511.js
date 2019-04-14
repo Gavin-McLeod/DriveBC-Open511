@@ -51,17 +51,18 @@ function displayEvents(theseEvents) {
         #TableHere      - where the data table presentation shouyld be placed.
   */
   
-  $("#incidentcount").text(theseEvents.length);                   //Display number of events and current time of this run (becasue we will be repeating in intervals)
+  $("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
   $("#thetime").text(new Date().toLocaleTimeString());
 
   
-  $("#TableHere").html($('<table>')).attr('id','theTable');
+  $("#TableHere").append($("<table>").attr('id','theTable'));
   $("#theTable").empty();
   console.log("Cleared table");
   
   if(theseEvents.length == 0) {			// write out something about no data here.
-  	  console.log("NO DATA");
-  	  $('<tr>').append($('<td>')).text('No events at this time').appendTo('#theTable');
+    console.log("NO DATA");
+    $("#TableHere").html('<p class="noevents">No events at this time</p>');
+    // $('<tr>').append($('<td class="noevents">').text('No events at this time')).appendTo('#theTable');
   } 
   else {
   	  $.each(theseEvents, function(i, event) {
