@@ -55,8 +55,8 @@ function displayEvents(theseEvents) {
   $("#thetime").text(new Date().toLocaleTimeString());
 
   
+  $("#TableHere").empty();
   $("#TableHere").append($("<table>").attr('id','theTable'));
-  $("#theTable").empty();
   console.log("Cleared table");
   
   if(theseEvents.length == 0) {			// write out something about no data here.
