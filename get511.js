@@ -18,17 +18,15 @@
  *     #TableHere      - where the data table presentation shouyld be placed.
  */
 
-
-var targeturl = "http://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&severity=MAJOR&jurisdiction=drivebc.ca";
+// CONFIG
+var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&severity=MAJOR&jurisdiction=drivebc.ca"; //Open511 access point URL
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
-var eventsholder;
-
+//
 
 function getDBC_Open511() {
   $.getJSON(targeturl, function (Events) {
     console.log("Data acquired");
-    eventsholder = Events.events;
-    displayEvents(eventsholder);
+    displayEvents(Events.events);
   })
   .fail(function() {
     console.log("error");
