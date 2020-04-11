@@ -2,7 +2,7 @@
 
 /* get511.js
  *   version 1.1
- *   gmcleod@gmail.com, 2019-10-05
+ *   gmcleod2@gmail.com, 2019-10-05
  *  
  *  Acquire and present event data within a table from an Open511 data source
  *  Created and tested only against the Open511 source from British Columbia
