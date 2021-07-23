@@ -67,7 +67,7 @@ function displayEvents(theseEvents) {
       var latlon = [];
       var mapurl;
 	
-      if (event.event_subtypes[0] == "FIRE") {
+      if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
         switch (event.geography.type) {
           case "Point":                                                                 // Point type geometery
           mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
