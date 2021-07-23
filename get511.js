@@ -49,9 +49,9 @@ function displayEvents(theseEvents) {
         #TableHere      - where the data table presentation shouyld be placed.
   */
   
-  $("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
+  //$("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
   $("#thetime").text(new Date().toLocaleTimeString());
-
+  var eventcount = 0;
   
   $("#TableHere").empty();
   $("#TableHere").append($("<table>").attr('id','theTable'));
@@ -68,6 +68,7 @@ function displayEvents(theseEvents) {
       var mapurl;
 	
       if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
+        eventcount++;
         switch (event.geography.type) {
           case "Point":                                                                 // Point type geometery
           mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
@@ -94,6 +95,7 @@ function displayEvents(theseEvents) {
           $('<td>').text(event.description)
         ).appendTo('#theTable')
       }
+      $("#incidentcount").text(eventcount);
     });
     
   }
