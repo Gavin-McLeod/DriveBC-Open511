@@ -47,6 +47,9 @@ function displayEvents(theseEvents) {
         #incidentcount  - count of events in data
         #thetime        - the local time the currently presented data was acquired
         #TableHere      - where the data table presentation shouyld be placed.
+
+      FIRES Version: This version is modified to display only events that have event_subtypes[0] == "FIRE"
+          This is specialized to at least count if not track those events that are associates with wildfires
   */
   
   //$("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
@@ -95,7 +98,7 @@ function displayEvents(theseEvents) {
           $('<td>').text(event.description)
         ).appendTo('#theTable')
       }
-      $("#incidentcount").text(eventcount);
+      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "total major events" );
     });
     
   }
