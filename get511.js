@@ -98,7 +98,7 @@ function displayEvents(theseEvents) {
           $('<td>').text(event.description)
         ).appendTo('#theTable')
       }
-      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + " total major events" );
+      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total major events" );
     });
     
   }
