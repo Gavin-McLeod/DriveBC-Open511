@@ -19,7 +19,7 @@
  */
 
 // CONFIG
-var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&severity=MAJOR&jurisdiction=drivebc.ca"; //Open511 access point URL
+var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&severity=MAJOR"; //Open511 access point URL -- &event_type=INCIDENT
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
 
@@ -40,7 +40,7 @@ function getDBC_Open511() {
 
 
 function displayEvents(theseEvents) {
-  /* build a table and populate it by iterating over events from the JSON structure
+  /* build an HTML table and populate it by iterating over events from the JSON structure
      IN: theseEvents = the table of events from the JSON feed.
      ASSUMES:
       existence of DOM entities with IDs as:
@@ -71,6 +71,7 @@ function displayEvents(theseEvents) {
       var mapurl;
 	
       if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
+      
         eventcount++;
         switch (event.geography.type) {
           case "Point":                                                                 // Point type geometery
@@ -94,7 +95,7 @@ function displayEvents(theseEvents) {
         }
     
         $('<tr>').append(
-          $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
+          $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
           $('<td>').text(event.description)
         ).appendTo('#theTable')
       }
