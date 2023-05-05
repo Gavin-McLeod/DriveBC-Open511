@@ -69,20 +69,20 @@ function displayEvents(theseEvents) {
 	
 		switch (event.geography.type) {
 		  case "Point":                                                                 // Point type geometery
-			mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
+  			mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
 			break;
 		  case "LineString":                                                            // LineString type geometery, display as Point at mid-string
-			var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
-			latlon = event.geography.coordinates[middleofstring];                       // coords at that index
-																						 
-			if (latlon[0] < 0) {													    // check that lat lon are in correct order ... for North America LON will always be < 0
-				var t = new Array();
-				t[0] = latlon[1];
-				t[1] = latlon[0];
-				latlon = t;
-			}
-			
-			mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
+        var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
+        latlon = event.geography.coordinates[middleofstring];                       // coords at that index
+                                              
+        if (latlon[0] < 0) {													    // check that lat lon are in correct order ... for North America LON will always be < 0
+          var t = new Array();
+          t[0] = latlon[1];
+          t[1] = latlon[0];
+          latlon = t;
+        }
+        
+        mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
 			break;
 		  default:
 			mapurl = "";
