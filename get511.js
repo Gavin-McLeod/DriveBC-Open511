@@ -96,7 +96,7 @@ function displayEvents(theseEvents) {
     
         $('<tr>').append(
           $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
-          $('<td>').text(event.description)
+          $$('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
         ).appendTo('#theTable')
       }
       $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total major events" );
