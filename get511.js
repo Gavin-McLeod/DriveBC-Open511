@@ -69,8 +69,8 @@ function displayEvents(theseEvents) {
     
       switch (event.geography.type) {
         case "Point":                                                                 // Point type geometery
-          // mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
-          mapurl = `https://www.bing.com/maps/?cp=${event.geography.coordinates[1]}%7E${event.geography.coordinates[0]}&lvl=18.1style=g`;
+          mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
+          // mapurl = `https://www.bing.com/maps/?cp=${event.geography.coordinates[1]}%7E${event.geography.coordinates[0]}&lvl=18.1style=g`;
         break;
         case "LineString":                                                            // LineString type geometery, display as Point at mid-string
           var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
@@ -83,8 +83,8 @@ function displayEvents(theseEvents) {
             latlon = t;
           }
           
-          // mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
-          mapurl = `https://www.bing.com/maps/?cp=${latlon[0]}%7E${latlon[1]}&lvl=18.1`;
+          mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
+          // mapurl = `https://www.bing.com/maps/?cp=${latlon[0]}%7E${latlon[1]}&lvl=18.1`;
         break;
         default:
         mapurl = "";
