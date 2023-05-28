@@ -89,6 +89,15 @@ function displayEvents(theseEvents) {
         default:
         mapurl = "";
       }
+      
+      // extract next update time
+      // not provided as a data element, so extract from description - use regex (?)
+      let pattern = /Next update time (.*\.) Last/;
+      console.log("PATTERN: " + event.description.match(pattern)[1]  );
+      
+      //console.log("PATTERN: " + pattern.exec(event.description) );
+
+
     
       $('<tr>').append(
         $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='map' href='${mapurl}'>MAP</a>`),
