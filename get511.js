@@ -69,7 +69,6 @@ function displayEvents(theseEvents) {
     $.each(theseEvents, function(i, event) {
       var latlon = [];
       var mapurl;
-	
       if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
       
         eventcount++;
@@ -96,7 +95,7 @@ function displayEvents(theseEvents) {
     
         $('<tr>').append(
           $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
-          $$('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
+          $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
         ).appendTo('#theTable')
       }
       $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total major events" );
