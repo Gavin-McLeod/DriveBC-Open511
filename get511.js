@@ -92,13 +92,14 @@ function displayEvents(theseEvents) {
       
       // extract next update time
       // not provided as a data element, so extract from description - use regex (?)
-      let pattern = /Next update time (.*\.) Last/;
-      console.log("PATTERN: " + event.description.match(pattern)[1]  );
+      let pattern = /Next update time (.*)\. Last/;
+      let upd_str = event.description.match(pattern)[1];
+      let upd_array = upd_str.split(" ");
+      let upd_Date = new Date();
+      upd_Date.setMonth(upd_array[1]); // invalid Date obj now
+      console.log("PATTERN: " + upd_array );  // PATTERN: Fri Jun 2 at 2:00 PM PDT
       
-      //console.log("PATTERN: " + pattern.exec(event.description) );
-
-
-    
+          
       $('<tr>').append(
         $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='map' href='${mapurl}'>MAP</a>`),
         $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
