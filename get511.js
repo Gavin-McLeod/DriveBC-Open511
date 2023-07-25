@@ -94,7 +94,7 @@ function displayEvents(theseEvents) {
         }
     
         $('<tr>').append(
-          $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
+          $('<td class="datecell">').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
           $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
         ).appendTo('#theTable')
       }
