@@ -19,7 +19,7 @@
  */
 
 // CONFIG
-var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&severity=MAJOR&jurisdiction=drivebc.ca"; //Open511 access point URL
+var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&severity=MAJOR"; //Open511 access point URL -- &event_type=INCIDENT
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
 
@@ -40,18 +40,21 @@ function getDBC_Open511() {
 
 
 function displayEvents(theseEvents) {
-  /* build a table and populate it by iterating over events from the JSON structure
+  /* build an HTML table and populate it by iterating over events from the JSON structure
      IN: theseEvents = the table of events from the JSON feed.
      ASSUMES:
       existence of DOM entities with IDs as:
         #incidentcount  - count of events in data
         #thetime        - the local time the currently presented data was acquired
         #TableHere      - where the data table presentation shouyld be placed.
+
+      FIRES Version: This version is modified to display only events that have event_subtypes[0] == "FIRE"
+          This is specialized to at least count if not track those events that are associates with wildfires
   */
   
-  $("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
+  //$("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
   $("#thetime").text(new Date().toLocaleTimeString());
-
+  var eventcount = 0;
   
   $("#TableHere").empty();
   $("#TableHere").append($("<table>").attr('id','theTable'));
@@ -66,8 +69,9 @@ function displayEvents(theseEvents) {
     $.each(theseEvents, function(i, event) {
       var latlon = [];
       var mapurl;
-	
-      if (event.event_subtypes[0] == "FIRE") {
+      if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
+      
+        eventcount++;
         switch (event.geography.type) {
           case "Point":                                                                 // Point type geometery
           mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
@@ -90,10 +94,11 @@ function displayEvents(theseEvents) {
         }
     
         $('<tr>').append(
-          $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
-          $('<td>').text(event.description)
+          $('<td class="datecell">').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
+          $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
         ).appendTo('#theTable')
       }
+      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total major events" );
     });
     
   }
