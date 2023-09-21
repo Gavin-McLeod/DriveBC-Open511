@@ -1,4 +1,5 @@
 # ignore Brackets temp files
 \#*
 *~
-
+*.csv
+*.txt
