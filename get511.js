@@ -99,7 +99,7 @@ function displayEvents(theseEvents) {
           $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
         ).appendTo('#theTable')
       }
-      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total major events" );
+      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total events" );
     });
     
   }
