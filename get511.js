@@ -20,7 +20,7 @@
 
 // CONFIG
 // must use a large limit (200) as not all fire events will be major so a fire event can appear well below the default 50 record limit.
-var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=200"; //Open511 access point URL -- &event_type=INCIDENT
+var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=300"; //Open511 access point URL -- &event_type=INCIDENT
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
 
