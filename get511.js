@@ -6,8 +6,8 @@
  *  
  *  Acquire and present event data within a table from an Open511 data source
  *  Created and tested only against the Open511 source from British Columbia
- *  Intended to present only current active data with MAJOR severity
- *  This version repeats its get and present on a indefinite repeating basis at a rate given in the variable repeatinterval
+ *  Intended to present only current active data with with an event sub-type of "FIRE"
+ *  This refreshes the data on a indefinite repeating basis at a rate given in the variable (INT) repeatinterval
  *  Also presents the time at which the current get is executed (the time at which current data was valid)
  *  and presents separately the count of events found
  *  
@@ -19,7 +19,7 @@
  */
 
 // CONFIG
-// must use a large limit (200) as not all fire events will be major so a fire event can appear well below the default 50 record limit.
+// must use a large limit (200?) as not all FIRE events will be major so a fire event can appear well beyond the default 50 record limit.
 var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=200"; //Open511 access point URL -- &event_type=INCIDENT
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
