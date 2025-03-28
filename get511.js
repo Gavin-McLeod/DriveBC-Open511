@@ -20,7 +20,7 @@
 
 // CONFIG
 // must use a large limit (200) as not all fire events will be major so a fire event can appear well below the default 50 record limit.
-var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=300"; //Open511 access point URL -- &event_type=INCIDENT
+var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=500"; //Open511 access point URL -- &event_type=INCIDENT
 var repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
 
@@ -70,8 +70,13 @@ function displayEvents(theseEvents) {
     $.each(theseEvents, function(i, event) {
       var latlon = [];
       var mapurl;
-      if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
+     
       
+//      if (event.event_subtypes[0] && event.event_subtypes[0] != 'undefined' && event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
+      if (event.event_type != 'ROAD_CONDITION' && event.event_subtypes[0] == 'AVALANCHE_HAZARD') { //skip unless this event is about a fire
+        
+        // console.log(">>>   : " + event.event_subtypes[0]); // for DEBUG
+
         eventcount++;
         switch (event.geography.type) {
           case "Point":                                                                 // Point type geometery
@@ -100,8 +105,8 @@ function displayEvents(theseEvents) {
         ).appendTo('#theTable')
       }
       $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total events" );
+//      console.log(event.id);  //for DEBUG
     });
-    
   }
 }
     
