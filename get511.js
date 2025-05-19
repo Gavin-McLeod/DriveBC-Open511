@@ -6,8 +6,8 @@
  *  
  *  Acquire and present event data within a table from an Open511 data source
  *  Created and tested only against the Open511 source from British Columbia
- *  Intended to present only current active data with MAJOR severity
- *  This version repeats its get and present on a indefinite repeating basis at a rate given in the variable repeatinterval
+ *  Intended to present only current active data with with an event sub-type of "FIRE"
+ *  This refreshes the data on a indefinite repeating basis at a rate given in the variable (INT) repeatinterval
  *  Also presents the time at which the current get is executed (the time at which current data was valid)
  *  and presents separately the count of events found
  *  
