@@ -40,71 +40,68 @@ function getDBC_Open511() {
 }
 
 
-function displayEvents(theseEvents) {
+function displayEvents(events) {
   /* build an HTML table and populate it by iterating over events from the JSON structure
-     IN: theseEvents = the table of events from the JSON feed.
-     ASSUMES:
-      existence of DOM entities with IDs as:
-        #incidentcount  - count of events in data
-        #thetime        - the local time the currently presented data was acquired
-        #TableHere      - where the data table presentation shouyld be placed.
+    IN: theseEvents = the table of events from the JSON feed.
+    ASSUMES:
+    existence of DOM entities with IDs as:
+      #incidentcount  - count of events in data
+      #thetime        - the local time the currently presented data was acquired
+      #TableHere      - where the data table presentation shouyld be placed.
 
-      FIRES Version: This version is modified to display only events that have event_subtypes[0] == "FIRE"
-          This is specialized to at least count if not track those events that are associates with wildfires
+    FIRES Version: This version is modified to display only events that have event_subtypes[0] == "FIRE"
+        This is specialized to at least count if not track those events that are associates with wildfires
   */
   
-  //$("#incidentcount").text(theseEvents.length);   //Display number of events and current time of this run (because we will be repeating in intervals)
-  $("#thetime").text(new Date().toLocaleTimeString());
-  var eventcount = 0;
-  
-  $("#TableHere").empty();
-  $("#TableHere").append($("<table>").attr('id','theTable'));
-  console.log("Cleared table");
-  
-  if(theseEvents.length == 0) {			// write out something about no data here.
-    console.log("NO DATA");
-    $("#TableHere").html('<p class="noevents">No events at this time</p>');
-    // $('<tr>').append($('<td class="noevents">').text('No events at this time')).appendTo('#theTable');
-  } 
-  else {
-    $.each(theseEvents, function(i, event) {
-      var latlon = [];
-      var mapurl;
-      if (event.event_subtypes[0] == "FIRE") { //skip unless this event is about a fire
-      
-        eventcount++;
-        switch (event.geography.type) {
-          case "Point":                                                                 // Point type geometery
-          mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
-          break;
-          case "LineString":                                                            // LineString type geometery, display as Point at mid-string
-          var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
-          latlon = event.geography.coordinates[middleofstring];                       // coords at that index
-                                                
-          if (latlon[0] < 0) {													    // check that lat lon are in correct order ... for North America LON will always be < 0
-            var t = new Array();
-            t[0] = latlon[1];
-            t[1] = latlon[0];
-            latlon = t;
-          }
-          
-          mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
-          break;
-          default:
-          mapurl = "";
-        }
-    
-        $('<tr>').append(
-          $('<td class="datecell">').html(`${event.event_type}<br>${event.roads[0].name}<br>${event.created}<br><a target='_blank' href='${mapurl}'>MAP</a>`),
-          $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
-        ).appendTo('#theTable')
-      }
-      $("#incidentcount").text(eventcount + " fire events of " + theseEvents.length + "   total events" );
-//      console.log(event.id);  //for DEBUG
-    });
+  const fireEvents = events.filter(e => e.event_subtypes[0] === "FIRE");
+  const tableContainer = $("#TableHere").empty();
+  const table = $("<table>").attr("id", "theTable");
+  const now = new Date().toLocaleTimeString();
+
+  $("#thetime").text(now);
+  $("#incidentcount").text(`${fireEvents.length} fire events of ${events.length} total events`);
+
+  if (fireEvents.length === 0) {
+    tableContainer.html('<p class="noevents">No events at this time</p>');
+    return;
   }
+
+  fireEvents.forEach(event => {
+    const mapUrl = generateMapUrl(event.geography);
+    const row = $("<tr>").append(
+      $("<td>").addClass("datecell").html(`
+        ${event.event_type}<br>
+        ${event.roads[0].name}<br>
+        ${event.created}<br>
+        <a target='_blank' href='${mapUrl}'>MAP</a>
+      `),
+      $("<td>").html(`${event.description}<br><em>Created: ${event.created}</em>`)
+    );
+    table.append(row);
+  });
+
+  tableContainer.append(table);
 }
-    
+
+function generateMapUrl(geo) {
+  // create and return a Google Maps specific URL to place a marker
+  // REQUIRES: geo  = event.geography
+  if (!geo) return "";
+  if (geo.type === "Point") {
+    const [lon, lat] = geo.coordinates;
+    return `https://maps.google.com/?q=${lat},${lon}&ll=${lat},${lon}&z=12`;
+  }
+  if (geo.type === "LineString") {
+    const mid = Math.floor(geo.coordinates.length / 2);
+    let [lon, lat] = geo.coordinates[mid];
+    // console.log("Original = " + [lat, lon]);
+    if (lat < 0) [lat, lon] = [lon, lat]; // Swap if needed  -- check that lat lon are in correct order ... for North America LON will always be < 0
+    // console.log("Swapped= = " + [lat, lon]);
+    return `https://maps.google.com/?q=${lat},${lon}&ll=${lat},${lon}&z=12`;
+  }
+  return "";
+}
+  
 function controller() {
   console.log( "calling get at " + new Date().toLocaleTimeString() );
   getDBC_Open511();
