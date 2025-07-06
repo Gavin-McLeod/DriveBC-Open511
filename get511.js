@@ -98,6 +98,60 @@ function generateMapUrl(geo) {
     if (lat < 0) [lat, lon] = [lon, lat]; // Swap if needed  -- check that lat lon are in correct order ... for North America LON will always be < 0
     // console.log("Swapped= = " + [lat, lon]);
     return `https://maps.google.com/?q=${lat},${lon}&ll=${lat},${lon}&z=12`;
+=======
+  
+  $("#TableHere").empty();
+  $("#TableHere").append($("<table>").attr('id','theTable'));
+  console.log("Cleared table");
+  
+  if(theseEvents.length == 0) {			// write out something about no data here.
+    console.log("NO DATA");
+    $("#TableHere").html('<p class="noevents">No events at this time</p>');
+    // $('<tr>').append($('<td class="noevents">').text('No events at this time')).appendTo('#theTable');
+  } 
+  else {
+    $.each(theseEvents, function(i, event) {
+      var latlon = [];
+      var mapurl;
+    
+      switch (event.geography.type) {
+        case "Point":                                                                 // Point type geometery
+          mapurl = `https://maps.google.com/?q=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&ll=${event.geography.coordinates[1]},${event.geography.coordinates[0]}&z=12`;
+          // mapurl = `https://www.bing.com/maps/?cp=${event.geography.coordinates[1]}%7E${event.geography.coordinates[0]}&lvl=18.1style=g`;
+        break;
+        case "LineString":                                                            // LineString type geometery, display as Point at mid-string
+          var middleofstring = Math.round(event.geography.coordinates.length / 2);    // index of middle of linestring
+          latlon = event.geography.coordinates[middleofstring];                       // coords at that index
+                                                
+          if (latlon[0] < 0) {													    // check that lat lon are in correct order ... for North America LON will always be < 0
+            var t = new Array();
+            t[0] = latlon[1];
+            t[1] = latlon[0];
+            latlon = t;
+          }
+          
+          mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
+          // mapurl = `https://www.bing.com/maps/?cp=${latlon[0]}%7E${latlon[1]}&lvl=18.1`;
+        break;
+        default:
+        mapurl = "";
+      }
+      
+      // extract next update time
+      // not provided as a data element, so extract from description - use regex (?)
+      let pattern = /Next update time (.*)\. Last/;
+      let upd_str = event.description.match(pattern)[1];
+      let upd_array = upd_str.split(" ");
+      let upd_Date = new Date();
+      upd_Date.setMonth(upd_array[1]); // invalid Date obj now
+      console.log("PATTERN: " + upd_array );  // PATTERN: Fri Jun 2 at 2:00 PM PDT
+      
+          
+      $('<tr>').append(
+        $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='map' href='${mapurl}'>MAP</a>`),
+        $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
+      ).appendTo('#theTable')
+	  });
   }
   return "";
 }
