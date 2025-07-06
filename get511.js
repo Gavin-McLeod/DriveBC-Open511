@@ -98,8 +98,7 @@ function generateMapUrl(geo) {
     if (lat < 0) [lat, lon] = [lon, lat]; // Swap if needed  -- check that lat lon are in correct order ... for North America LON will always be < 0
     // console.log("Swapped= = " + [lat, lon]);
     return `https://maps.google.com/?q=${lat},${lon}&ll=${lat},${lon}&z=12`;
-=======
-  
+  }
   $("#TableHere").empty();
   $("#TableHere").append($("<table>").attr('id','theTable'));
   console.log("Cleared table");
