@@ -20,8 +20,8 @@
 
 // CONFIG
 // must use a large limit (200) as not all fire events will be major so a fire event can appear well below the default 50 record limit.
-var targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=350"; //Open511 access point URL -- &event_type=INCIDENT
-var repeatinterval = 15 * 60 * 1000;  // time between data gets
+const targeturl = "https://api.open511.gov.bc.ca/events?format=json&status=ACTIVE&jurisdiction=drivebc.ca&limit=350"; //Open511 access point URL -- &event_type=INCIDENT
+const repeatinterval = 15 * 60 * 1000;  // time between data gets
 //
 
 function getDBC_Open511() {
@@ -75,7 +75,7 @@ function displayEvents(events) {
         ${event.created}<br>
         <a target='_blank' href='${mapUrl}'>MAP</a>
       `),
-      $("<td>").html(`${event.description}<br><em>Created: ${event.created}</em>`)
+      $("<td>").html(`${event.description}<br><em>Created: ${event.created}<br>Updated: ${event.updated}</em>`)
     );
     table.append(row);
   });
