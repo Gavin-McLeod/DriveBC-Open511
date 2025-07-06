@@ -86,7 +86,7 @@ function displayEvents(theseEvents) {
             t[0] = latlon[1];
             t[1] = latlon[0];
             latlon = t;
-          }
+          } 
           
           mapurl = `https://maps.google.com/?q=${latlon}&ll=${latlon}&z=12`;
           break;
