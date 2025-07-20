@@ -53,13 +53,16 @@ function displayEvents(events) {
         This is specialized to at least count if not track those events that are associates with wildfires
   */
   
-  const fireEvents = events.filter(e => e.event_subtypes[0] === "FIRE");
+  // pre-filter the events array to only those that are fire events
+  const fireEvents = events.filter(e => e.event_subtypes && e.event_subtypes[0] === "FIRE");
+  
   const tableContainer = $("#TableHere").empty();
   const table = $("<table>").attr("id", "theTable");
   const now = new Date().toLocaleTimeString();
 
   $("#thetime").text(now);
   $("#incidentcount").text(`${fireEvents.length} fire events of ${events.length} total events`);
+
 
   if (fireEvents.length === 0) {
     tableContainer.html('<p class="noevents">No events at this time</p>');
