@@ -39,7 +39,6 @@ function getDBC_Open511() {
 
 }
 
-
 function displayEvents(events) {
   /* build an HTML table and populate it by iterating over events from the JSON structure
     IN: theseEvents = the table of events from the JSON feed.
@@ -70,7 +69,8 @@ function displayEvents(events) {
   }
 
   fireEvents.forEach(event => {
-    const mapUrl = generateMapUrl(event.geography);
+    // const mapUrl = generateMapUrl(event.geography);
+    const mapUrl = convertDriveBCUrl(event.id);
     const row = $("<tr>").append(
       $("<td>").addClass("datecell").html(`
         ${event.event_type}<br>
@@ -86,7 +86,16 @@ function displayEvents(events) {
   tableContainer.append(table);
 }
 
-function generateMapUrl(geo) {
+function convertDriveBCUrl(input) {
+  // Converts "drivebc.ca/DBC-xxxxx" or "drivebc.ca/DBCRCON-xxxxxx" (ie from event.id) into the correct DriveBC event URL
+  const match = input.match(/drivebc\.ca\/(DBC(?:RCON)?-\d+)/i);
+  if (match) {
+    return `https://www.drivebc.ca/?type=event&id=${match[1]}`;
+  }
+  return "";
+}
+
+function generateMapUrl(geo) { // NOT USED - RETAINED FOR POSSIBLE FUTURE USE
   // create and return a Google Maps specific URL to place a marker
   // REQUIRES: geo  = event.geography
   if (!geo) return "";
