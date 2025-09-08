@@ -78,7 +78,7 @@ function displayEvents(events) {
         ${event.event_type}<br>
         ${event.roads[0].name}<br>
         ${event.created}<br>
-        <a target='_blank' href='${mapUrl}'>MAP</a>
+          <a target='_blank' href='${mapUrl}'>MAP</a>
       `),
       $("<td>").html(`${event.description}<br><em>Created: ${event.created}<br>Updated: ${event.updated}</em>`)
     );
