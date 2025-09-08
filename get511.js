@@ -70,7 +70,9 @@ function displayEvents(events) {
 
   fireEvents.forEach(event => {
     // const mapUrl = generateMapUrl(event.geography);
-    const mapUrl = convertDriveBCUrl(event.id);
+    // const mapUrl = convertDriveBCUrl(event.id);
+    const mapUrl = generateDriveBCMapUrl(event);
+    
     const row = $("<tr>").append(
       $("<td>").addClass("datecell").html(`
         ${event.event_type}<br>
@@ -113,7 +115,36 @@ function generateMapUrl(geo) { // NOT USED - RETAINED FOR POSSIBLE FUTURE USE
   }
   return "";
 }
-  
+
+function generateDriveBCMapUrl(event) {
+  // Generates a DriveBC map URL with pan and zoom for a given event
+  // event: { id: string, geography: { type: "Point"|"LineString", coordinates: [...] } }
+  if (!event || !event.geography || !event.id) return "";
+
+  let lat, lon;
+  if (event.geography.type === "Point") {
+    [lon, lat] = event.geography.coordinates;
+  } else if (event.geography.type === "LineString") {
+    const mid = Math.floor(event.geography.coordinates.length / 2);
+    [lon, lat] = event.geography.coordinates[mid];
+  } else {
+    return "";
+  }
+
+  // Ensure correct order (lat, lon) for pan parameter
+  if (lat < 0) [lat, lon] = [lon, lat];
+
+  // Default zoom value (can be adjusted as needed)
+  const zoom = 8.5;
+
+  // Extract the event id (e.g., DBC-81276 or DBCRCON-223448)
+  const idMatch = event.id.match(/(DBC(?:RCON)?-\d+)/i);
+  const eventId = idMatch ? idMatch[1] : event.id;
+
+  return `https://www.drivebc.ca/?pan=${lon},${lat}&zoom=${zoom}&type=event&id=${eventId}`;
+}
+
+
 function controller() {
   console.log( "calling get at " + new Date().toLocaleTimeString() );
   getDBC_Open511();
