@@ -136,12 +136,14 @@ function generateDriveBCMapUrl(event) {
 
   // Default zoom value (can be adjusted as needed)
   const zoom = 8.5;
-
+  const start = "null";
+  const end = "null";
+  
   // Extract the event id (e.g., DBC-81276 or DBCRCON-223448)
   const idMatch = event.id.match(/(DBC(?:RCON)?-\d+)/i);
   const eventId = idMatch ? idMatch[1] : event.id;
 
-  return `https://www.drivebc.ca/?pan=${lon},${lat}&zoom=${zoom}&type=event&id=${eventId}`;
+  return `https://www.drivebc.ca/?pan=${lon},${lat}&zoom=${zoom}&type=event&id=${eventId}&start=${start}&end=${end}`;
 }
 
 
