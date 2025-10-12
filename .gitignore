@@ -4,4 +4,8 @@
 *.csv
 *.txt
 *.rej
+<<<<<<< HEAD
 dms.json
+=======
+temp*.*
+>>>>>>> 75574a356ace20f76ad7b4502613dc3b58ef1718
