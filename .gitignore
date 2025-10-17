@@ -5,3 +5,4 @@
 *.txt
 *.rej
 dms.json
+temp*.*
