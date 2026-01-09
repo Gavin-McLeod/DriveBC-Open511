@@ -100,8 +100,10 @@ function displayEvents(theseEvents) {
       // console.log("PATTERN: " + upd_array );  // PATTERN: Fri Jun 2 at 2:00 PM PDT
       
           
+      var displayId = event.id ? event.id.replace(/^.*\//, '') : event.id;
+
       $('<tr>').append(
-        $('<td>').html(`${event.event_type}<br>${event.roads[0].name}<br><a target='map' href='${mapurl}'>MAP</a>`),
+        $('<td>').html(`${displayId}<br>${event.event_type}<br>${event.roads[0].name}<br><a target='map' href='${mapurl}'>MAP</a>`),
         $('<td>').html(`${event.description}<br><em>Created: ${event.created}</em>`)
       ).appendTo('#theTable')
 	  });
